@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     Rigidbody2D body;
+    float direction; // -1 or 1, representing left or right
     public float speed; // user inputs speed from Unity
     Vector2 force;      // (x , y)
     // Start is called before the first frame update
@@ -17,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float direction = Input.GetAxisRaw("Horizontal"); // calling input constantly, e.i. [-1, 1], from keyboard using Unity built in system.
+        direction = Input.GetAxisRaw("Horizontal"); // calling input constantly, e.i. [-1, 1], from keyboard using Unity built in system.
         //Debug.Log(direction);
 
         force.x = direction;  // Only X in the Vector is changed to either 1 or -1.
@@ -26,6 +27,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate() 
     {
-        body.velocity = force * speed;
+        if (direction != 0)
+        {
+            body.velocity = force * speed;
+        }
+        else 
+        {
+            Vector2 hold;
+            hold.x = 0;
+            hold.y = body.velocity.y;
+            body.velocity = hold;
+        }
     }
 }
